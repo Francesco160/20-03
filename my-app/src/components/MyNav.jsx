@@ -1,20 +1,22 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Form, FormControl} from 'react-bootstrap';
 
-const MyNav = () => {
+const MyNav = ({ onSearch }) => {
+  
+  const handleInputChange = (event) => {
+    onSearch(event.target.value); 
+  };
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
-        <Navbar.Brand href="#home">MyApp</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#about">About</Nav.Link>
-            <Nav.Link href="#contact">Browse</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
+      <Navbar.Brand href="#home">My Bookstore</Navbar.Brand>
+      <Form inline className="ml-auto">
+        <FormControl
+          type="text"
+          placeholder="Search for a book"
+          className="mr-sm-2"
+          onChange={handleInputChange} 
+        />
+      </Form>
     </Navbar>
   );
 };
