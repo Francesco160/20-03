@@ -5,9 +5,9 @@ const CommentList = ({ comments }) => {
   return (
     <div className="comment-list">
       <h5>Comments</h5>
-      <ul>
+      <ul className="list-group">
         {comments.map((comment) => (
-          <SingleComment key={comment._id} comment={comment} />  // Usa l'ID del commento
+          <SingleComment key={comment._id} comment={comment} /> 
         ))}
       </ul>
     </div>

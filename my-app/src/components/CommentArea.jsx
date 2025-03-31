@@ -1,45 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import CommentList from './CommentList';
-import AddComment from './AddComment';
+import React, { useEffect, useState } from 'react';
+import { Card, ListGroup } from 'react-bootstrap';
+import AddComment from './AddComment'; // Importiamo il componente AddComment
 
 const CommentArea = ({ bookId }) => {
   const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`https://striveschool-api.herokuapp.com/api/books/${bookId}/comments`, {
-          headers: {
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JkYzNmNDFlMTQwNjAwMTUzMTRjYTEiLCJpYXQiOjE3NDI1NzA4MDksImV4cCI6MTc0Mzc4MDQwOX0.Dar2Et9PmxMA8cP8V3PM6KwYkkjcvIen5h39tzHqR1A',
-          },
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setComments(data);
-        } else {
-          throw new Error('Failed to fetch comments');
+    if (bookId) {
+      fetch(`https://striveschool-api.herokuapp.com/api/comments/${bookId}`, {
+        headers: {
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2JkYzNmNDFlMTQwNjAwMTUzMTRjYTEiLCJpYXQiOjE3NDI1NzA4MDksImV4cCI6MTc0Mzc4MDQwOX0.Dar2Et9PmxMA8cP8V3PM6KwYkkjcvIen5h39tzHqR1A"
         }
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchComments();
+      })
+      .then((response) => response.json())
+      .then((data) => setComments(data))
+      .catch((error) => console.error("Errore fetching dei commenti:", error));
+    }
   }, [bookId]);
 
-  if (loading) return <p>Loading comments...</p>;
-  if (error) return <p>Error fetching comments: {error}</p>;
+  const addNewComment = (newComment) => {
+    setComments((prevComments) => [...prevComments, newComment]);
+  };
+  
 
   return (
-    <div className="comment-area">
-      <CommentList comments={comments} />
-      <AddComment bookId={bookId} setComments={setComments} />
-    </div>
+    <Card className="mb-3 shadow-sm">
+      <Card.Header as="h5">Comments</Card.Header>
+      <ListGroup variant="flush">
+        {comments.length > 0 ? (
+          comments.map((comment) => (
+            <ListGroup.Item key={comment._id}>
+              <strong>{comment.comment}</strong>
+              <span className="text-muted"> - {comment.rate}/5</span>
+            </ListGroup.Item>
+          ))
+        ) : (
+          <ListGroup.Item>No comments yet.</ListGroup.Item>
+        )}
+      </ListGroup>
+      <Card.Body>
+        <AddComment bookId={bookId} addNewComment={addNewComment} />
+
+      </Card.Body>
+    </Card>
+
   );
 };
 
