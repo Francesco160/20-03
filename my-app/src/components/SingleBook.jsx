@@ -1,25 +1,20 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
- 
+import { Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-const SingleBook = ({ book, onBookSelect, isSelected }) => {
+const SingleBook = ({ book }) => {
   return (
-   <Card
-      className="m-3"
-      onClick={onBookSelect}
-      style={{
-        cursor: 'pointer',
-        border: isSelected ? '2px solid red' : '1px solid #ccc', // Cambia il bordo se selezionato
-        height: '100%' // Assicurati che le card abbiano un'altezza definita
-      }}
-    >
+    <Card className="h-100 shadow-sm">
       <Card.Img variant="top" src={book.img} alt={book.title} />
       <Card.Body>
         <Card.Title>{book.title}</Card.Title>
-        <Card.Text>Price: {book.price} €</Card.Text>
+        <Card.Text>Price: ${book.price}</Card.Text>
+        {/* Pulsante per i dettagli del libro */}
+        <Link to={`/book/${book.asin}`}>
+          <Button variant="primary">Dettagli</Button>
+        </Link>
       </Card.Body>
     </Card>
-    
   );
 };
 
