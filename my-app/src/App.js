@@ -30,7 +30,14 @@ function App() {
       <Routes>
             <Route
               path="/"
-              element={<AllTheBooks books={booksData} searchQuery={searchQuery} onBookSelect={setSelectedBookAsin} />}
+              element={ <>
+                <Welcome /> 
+                <AllTheBooks
+                  books={booksData}
+                  searchQuery={searchQuery}
+                  onBookSelect={setSelectedBookAsin}
+                />
+              </> }
             />
             <Route path="/book/:asin" element={<BookDetails />} />
             {/* Route per i commenti */}
